@@ -3,7 +3,7 @@ name = "cnc_kalkulacka"
 version = "0.1.0"
 edition = "2021"
 
-# Důležité: Název knihovny musí sedět s tím, co čeká Android
+# Knihovna se musí jmenovat main_lib (to se osvědčilo)
 [lib]
 name = "main_lib"
 crate-type = ["cdylib"]
