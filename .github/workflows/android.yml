@@ -6,20 +6,19 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Setup Java
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '11'
+          java-version: '17'
 
-      - name: Install Rust
-        uses: actions-rs/toolchain@v1
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
         with:
-          toolchain: stable
-          target: aarch64-linux-android
-          override: true
+          targets: aarch64-linux-android
 
       - name: Install cargo-apk
         run: cargo install cargo-apk
