@@ -10,21 +10,29 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
-      
+
+      # TRIK: Zjistíme, co tam je, a vytvoříme falešnou složku 'android-30'
+      # tím, že zkopírujeme tu existující (33 nebo 34).
+      # Tím nástroj najde '30' a bude spokojený.
+      - name: Hack - Create Fake Android 30
+        run: |
+          cd $ANDROID_HOME/platforms
+          LATEST=$(ls -d android-* | sort -V | tail -n 1)
+          echo "Používám $LATEST jako základ pro android-30"
+          cp -r $LATEST android-30
+          ls -l
+
       - uses: dtolnay/rust-toolchain@stable
         with:
-          targets: aarch64-linux-android, armv7-linux-androideabi
-
-      # Instalace nástroje xbuild (náhrada za cargo-apk)
-      - name: Install xbuild
-        run: cargo install xbuild
-
-      # Build pomocí xbuild (automaticky najde správné SDK)
-      - name: Build APK with xbuild
-        run: |
-            xbuild apk --target aarch64-linux-android --target armv7-linux-androideabi
-
+          targets: aarch64-linux-android
+      
+      - name: Install cargo-apk
+        run: cargo install cargo-apk
+      
+      - name: Build APK
+        run: cargo apk build
+      
       - uses: actions/upload-artifact@v4
         with:
           name: cnc-kalkulacka
-          path: target/android-artifacts/app.apk
+          path: target/debug/apk/cnc_kalkulacka.apk

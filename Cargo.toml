@@ -19,4 +19,5 @@ android_version = 33
 target_sdk_version = 33
 min_sdk_version = 24
 fullscreen = true
-build_targets = ["aarch64-linux-android", "armv7-linux-androideabi"]
+# Jedna architektura pro rychlost (pak přidáme druhou)
+build_targets = ["aarch64-linux-android"]
