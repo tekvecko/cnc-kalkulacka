@@ -7,18 +7,19 @@ edition = "2021"
 crate-type = ["cdylib"]
 
 [dependencies]
-# Použijeme modernější verzi knihoven
-eframe = { version = "0.27.0", default-features = false, features = ["glow", "android-native-activity"] }
-android-activity = { version = "0.5", features = ["native-activity"] }
-log = "0.4"
-android_logger = "0.13"
+# Vrátíme se k osvědčené verzi
+eframe = { version = "0.22.0", default-features = false, features = ["glow", "android-native-activity"] }
+android-activity = { version = "=0.4.3", features = ["native-activity"] }
+# Logger zatím pryč, ať to nekomplikuje
+# log = "0.4"
+# android_logger = "0.13"
 
 [package.metadata.android]
 package = "com.moje.cnckalkulacka"
-label = "CNC Reset"
-# TADY JE ZMĚNA: Verze 31. Musí se shodovat s tím, co nainstalujeme níže.
-android_version = 31
-target_sdk_version = 33
-min_sdk_version = 26
+label = "CNC Final"
+# TADY: Všechno sjednotíme na 30.
+android_version = 30
+target_sdk_version = 30
+min_sdk_version = 24
 fullscreen = true
 build_targets = ["aarch64-linux-android"]

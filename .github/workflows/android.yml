@@ -11,11 +11,12 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
       
-      # TOTO JE KLÍČ: Donutíme server stáhnout přesně tu verzi 31, kterou chce Cargo.toml
-      - name: Install Android SDK 31
+      # TOTO JE KLÍČOVÉ: Instalace Android 30 + kontrola
+      - name: Install Android SDK 30
         run: |
-          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses > /dev/null
-          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platforms;android-31" "build-tools;31.0.0"
+          echo "y" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platforms;android-30" "build-tools;30.0.3"
+          echo "Kontrola nainstalovaných platforem:"
+          ls $ANDROID_HOME/platforms/
       
       - uses: dtolnay/rust-toolchain@stable
         with:
@@ -24,7 +25,7 @@ jobs:
       - name: Install cargo-apk
         run: cargo install cargo-apk
       
-      - name: Build APK
+      - name: Build APK (Target 30)
         run: cargo apk build
       
       - uses: actions/upload-artifact@v4
