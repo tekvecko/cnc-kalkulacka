@@ -1,35 +1,21 @@
 name: Build Android APK
 on: [push]
-
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Java
-        uses: actions/setup-java@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
-
-      # ZDE JE ZMĚNA: Přidáváme podporu pro 32bitové systémy (armv7)
-      - name: Setup Rust
-        uses: dtolnay/rust-toolchain@stable
+      - uses: dtolnay/rust-toolchain@stable
         with:
           targets: aarch64-linux-android, armv7-linux-androideabi
-
-      - name: Install cargo-apk
-        run: cargo install cargo-apk
-
+      - run: cargo install cargo-apk
       - name: Build APK (Universal)
-        # Tento příkaz vyrobí APK, které funguje všude
-        run: cargo apk build --target aarch64-linux-android --target armv7-linux-androideabi
-
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
+        run: cargo apk build
+      - uses: actions/upload-artifact@v4
         with:
           name: cnc-kalkulacka
           path: target/debug/apk/cnc_kalkulacka.apk
-

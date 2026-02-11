@@ -8,7 +8,8 @@ crate-type = ["cdylib"]
 
 [dependencies]
 eframe = { version = "0.22.0", default-features = false, features = ["glow", "android-native-activity"] }
-# Stále držíme tuto stabilní verzi
+android_logger = "0.13"
+log = "0.4"
 android-activity = { version = "=0.4.3", features = ["native-activity"] }
 
 [package.metadata.android]
@@ -18,4 +19,5 @@ android_version = 29
 target_sdk_version = 33
 min_sdk_version = 21
 fullscreen = true
-
+# TOTO JE OPRAVA PÁDŮ: Vyrobí APK, které funguje na starších (armv7) i nových (aarch64) telefonech
+build_targets = ["aarch64-linux-android", "armv7-linux-androideabi"]
