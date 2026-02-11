@@ -30,11 +30,11 @@ jobs:
           $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platforms;android-30" "platforms;android-31" "build-tools;33.0.0"
 
       - name: Build APK
-        run: cargo apk build --release
+        run: cargo apk build  # ZDE JSME SMAZALI "--release"
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: cnc-kalkulacka
-          path: target/release/apk/cnc_kalkulacka.apk
+          path: target/debug/apk/cnc_kalkulacka.apk  # ZDE ZMĚNA NA "debug"
 
