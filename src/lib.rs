@@ -89,7 +89,7 @@ fn android_main(app: AndroidApp) {
     use eframe::NativeOptions;
     
     // Inicializace logování pro případ chyby
-    android_logger::init_once(android_logger::Config::default().with_min_level(log::Level::Info));
+    android_logger::init_once(android_logger::Config::default().with_max_level(log::Level::Info));
 
     // ZDE JE TA OPRAVA: Vynutíme použití Glow (OpenGL) místo Vulkanu
     let mut options = NativeOptions::default();
