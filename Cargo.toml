@@ -17,7 +17,6 @@ label = "CNC Kalkulačka"
 # ZDE JE OPRAVA: Místo 30 dáváme 33 (ta je na serveru nainstalovaná)
 android_version = 33
 target_sdk_version = 33
-# Toto zachová funkčnost i na starších telefonech
 min_sdk_version = 23
 fullscreen = true
 # Důležité: Podpora pro starší i nové procesory
