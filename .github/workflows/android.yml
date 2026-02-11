@@ -5,20 +5,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
       - uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
 
-      # KROK OPRAVY: Ruční instalace chybějící platformy 30
-      # Používáme přesný příkaz, který akceptuje licence
-      - name: Install Android SDK 30 & NDK
+      # Instalace SDK 30 a NDK (aby build prošel)
+      - name: Install SDK & NDK
         run: |
           yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses > /dev/null
           $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platforms;android-30" "build-tools;30.0.3" "ndk;25.2.9519653"
 
-      # Nastavíme Rust pro obě architektury (32bit i 64bit)
       - uses: dtolnay/rust-toolchain@stable
         with:
           targets: aarch64-linux-android, armv7-linux-androideabi
@@ -26,7 +23,6 @@ jobs:
       - name: Install cargo-apk
         run: cargo install cargo-apk
       
-      # Tady se děje magie - build pro obě verze najednou
       - name: Build Universal APK
         run: cargo apk build
       

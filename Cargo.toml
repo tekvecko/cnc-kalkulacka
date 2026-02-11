@@ -7,23 +7,23 @@ edition = "2021"
 crate-type = ["cdylib"]
 
 [dependencies]
-# Osvědčená stabilní verze grafiky
-eframe = { version = "0.22.0", default-features = false, features = ["glow", "android-native-activity"] }
-# Klíčová komponenta pro běh na Androidu
-android-activity = { version = "=0.4.3", features = ["native-activity"] }
-# Logování pro jistotu (abychom viděli chyby, kdyby nějaké byly)
+# Moderní verze eframe (opravuje pády na novějších Androidech)
+eframe = { version = "0.27.2", default-features = false, features = ["glow", "android-native-activity"] }
+# Odpovídající verze lepidla (musí být 0.5 pro eframe 0.27)
+android-activity = { version = "0.5.2", features = ["native-activity"] }
+# Logování
 log = "0.4"
 android_logger = "0.13"
 
 [package.metadata.android]
 package = "com.moje.cnckalkulacka"
-label = "CNC Kalkulačka"
-# Toto je verze Androidu, kterou APK "cílí" (Android 13)
+label = "CNC 2026"
+android_version = 33
 target_sdk_version = 33
 min_sdk_version = 21
 fullscreen = true
+# Důležité: Povolení internetu (některé telefony shazují aplikace bez oprávnění)
+permissions = ["android.permission.INTERNET"]
 
-# TOTO JE TA "BLBOST", CO CHYBĚLA:
-# Musíme vyrobit APK pro obě architektury najednou.
-# Tím zajistíme, že to nespadne na 32bit telefonech.
+# Build pro obě architektury (aby to nepadalo na 32bit mobilech)
 build_targets = ["aarch64-linux-android", "armv7-linux-androideabi"]

@@ -1,6 +1,7 @@
 use eframe::egui;
 use log::info;
 
+// Definice dat
 pub struct CncApp {
     rpm_vc: String, rpm_d: String, rpm_result: String,
     feed_n: String, feed_z: String, feed_fz: String, feed_result: String,
@@ -21,7 +22,7 @@ impl eframe::App for CncApp {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         egui::CentralPanel::default().show(ctx, |ui| {
             ui.heading("CNC Kalkulačka");
-            ui.add_space(10.0);
+            ui.add_space(15.0);
             
             ui.horizontal(|ui| {
                 if ui.selectable_label(self.active_tab == 0, "Otáčky").clicked() { self.active_tab = 0; }
@@ -54,19 +55,22 @@ impl eframe::App for CncApp {
     }
 }
 
+// VSTUPNÍ BOD PRO ANDROID (Specifický pro verzi 0.27)
 #[cfg(target_os = "android")]
 #[no_mangle]
 fn android_main(app: android_activity::AndroidApp) {
     use eframe::NativeOptions;
     
-    // Inicializace logování (pro debugging)
+    // Zapneme logování chyb
     android_logger::init_once(android_logger::Config::default().with_max_level(log::LevelFilter::Info));
-    info!("Startuji CNC Kalkulačku...");
-
-    let mut options = NativeOptions::default();
-    options.renderer = eframe::Renderer::Glow; // Důležité pro stabilitu
     
-    // Tady předáváme správně "app" do novější verze eframe
+    // Nastavení grafiky
+    let options = NativeOptions {
+        renderer: eframe::Renderer::Glow, // OpenGL ES
+        ..Default::default()
+    };
+    
+    // Spuštění bez ukládání stavu (častá příčina pádů)
     eframe::run_native(
         "CNC Kalkulačka",
         options,
