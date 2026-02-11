@@ -25,7 +25,11 @@ jobs:
       - name: Build APK
         run: cargo apk build
       
+      - name: List APKs (Debug info)
+        run: find target -name "*.apk"
+
+      # Tady je oprava - najdeme cokoliv s koncovkou .apk
       - uses: actions/upload-artifact@v4
         with:
           name: cnc-kalkulacka
-          path: target/debug/apk/cnc_kalkulacka.apk
+          path: target/debug/apk/*.apk
