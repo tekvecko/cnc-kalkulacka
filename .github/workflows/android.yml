@@ -9,12 +9,22 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
+      
+      # Instalace chybějící Android platformy (TOHLE JE TA OPRAVA)
+      - name: Install Android Platform
+        run: |
+          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses
+          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platforms;android-30" "build-tools;30.0.3"
+
       - uses: dtolnay/rust-toolchain@stable
         with:
           targets: aarch64-linux-android, armv7-linux-androideabi
+      
       - run: cargo install cargo-apk
+      
       - name: Build APK (Universal)
         run: cargo apk build
+      
       - uses: actions/upload-artifact@v4
         with:
           name: cnc-kalkulacka

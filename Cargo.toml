@@ -15,7 +15,7 @@ android-activity = { version = "=0.4.3", features = ["native-activity"] }
 [package.metadata.android]
 package = "com.moje.cnckalkulacka"
 label = "CNC Kalkulačka"
-android_version = 29
+android_version = 30
 target_sdk_version = 33
 min_sdk_version = 21
 fullscreen = true
