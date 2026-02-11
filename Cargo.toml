@@ -7,9 +7,10 @@ edition = "2021"
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]
-# ZDE JE TA MAGICKÁ OPRAVA: Zapneme Android feature přímo tady
 eframe = { version = "0.24.0", features = ["android-native-activity"] }
 serde = { version = "1", features = ["derive"] }
+# TOTO JE TA CHYBĚJÍCÍ ČÁST:
+android-activity = { version = "0.4", features = ["native-activity"] }
 
 [package.metadata.android]
 package = "com.moje.cnckalkulacka"
