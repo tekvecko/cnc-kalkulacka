@@ -7,14 +7,11 @@ edition = "2021"
 crate-type = ["cdylib"]
 
 [dependencies]
-# Použijeme stabilní verzi eframe
+# Použijeme eframe 0.22, která je nejméně náchylná k pádům na Androidu
 eframe = { version = "0.22", default-features = false, features = ["glow", "android-native-activity"] }
-# Tato verze musí být sjednocena
-android-activity = { version = "0.4.3", features = ["native-activity"] }
 
-[patch.crates-io]
-# Tímto vynutíme jednu verzi pro celý projekt a předejdeme pádu
-android-activity = { version = "0.4.3", features = ["native-activity"] }
+# Zde je klíč: Vynutíme verzi 0.4.3, kterou eframe 0.22 interně vyžaduje
+android-activity = { version = "=0.4.3", features = ["native-activity"] }
 
 [package.metadata.android]
 package = "com.moje.cnckalkulacka"
