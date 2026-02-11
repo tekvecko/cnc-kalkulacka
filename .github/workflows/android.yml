@@ -9,23 +9,15 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
-      
-      # Instalace chybějícího Android SDK 30
-      - name: Install Android SDK 30 manually
+      - name: Install Android SDK 33
         run: |
-          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses > /dev/null
-          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platforms;android-30" "build-tools;30.0.3"
-
+            yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses > /dev/null
+            $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platforms;android-33" "build-tools;33.0.0"
       - uses: dtolnay/rust-toolchain@stable
         with:
-          targets: aarch64-linux-android, armv7-linux-androideabi
-      
-      - name: Install cargo-apk
-        run: cargo install cargo-apk
-      
-      - name: Build APK (Universal)
-        run: cargo apk build
-      
+          targets: aarch64-linux-android
+      - run: cargo install cargo-apk
+      - run: cargo apk build
       - uses: actions/upload-artifact@v4
         with:
           name: cnc-kalkulacka
