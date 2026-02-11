@@ -23,6 +23,12 @@ jobs:
       - name: Install cargo-apk
         run: cargo install cargo-apk
 
+      # TOTO JE TA NOVÁ ČÁST PRO OPRAVU CHYBY
+      - name: Install Android Platform
+        run: |
+          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses
+          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platforms;android-30" "platforms;android-31" "build-tools;33.0.0"
+
       - name: Build APK
         run: cargo apk build --release
 
