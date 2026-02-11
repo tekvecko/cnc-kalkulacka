@@ -1,5 +1,4 @@
 name: Build Android APK
-
 on: [push]
 
 jobs:
@@ -15,26 +14,22 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
+      # ZDE JE ZMĚNA: Přidáváme podporu pro 32bitové systémy (armv7)
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable
         with:
-          targets: aarch64-linux-android
+          targets: aarch64-linux-android, armv7-linux-androideabi
 
       - name: Install cargo-apk
         run: cargo install cargo-apk
 
-      # TOTO JE TA NOVÁ ČÁST PRO OPRAVU CHYBY
-      - name: Install Android Platform
-        run: |
-          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses
-          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platforms;android-30" "platforms;android-31" "build-tools;33.0.0"
-
-      - name: Build APK
-        run: cargo apk build  # ZDE JSME SMAZALI "--release"
+      - name: Build APK (Universal)
+        # Tento příkaz vyrobí APK, které funguje všude
+        run: cargo apk build --target aarch64-linux-android --target armv7-linux-androideabi
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: cnc-kalkulacka
-          path: target/debug/apk/cnc_kalkulacka.apk  # ZDE ZMĚNA NA "debug"
+          path: target/debug/apk/cnc_kalkulacka.apk
 

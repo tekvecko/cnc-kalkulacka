@@ -1,5 +1,9 @@
 use eframe::egui;
 
+// ... (ZDE BY MĚL BÝT VÁŠ KÓD CncApp - STEJNÝ JAKO MINULE) ...
+// Pro úsporu místa sem dávám jen tu kritickou spodní část, 
+// ale vy tam nechte celou strukturu CncApp!
+
 pub struct CncApp {
     rpm_vc: String, rpm_d: String, rpm_result: String,
     feed_n: String, feed_z: String, feed_fz: String, feed_result: String,
@@ -26,23 +30,23 @@ impl eframe::App for CncApp {
             });
             ui.separator();
             if self.active_tab == 0 {
-                ui.label("Vc (m/min):"); ui.text_edit_singleline(&mut self.rpm_vc);
-                ui.label("D (mm):"); ui.text_edit_singleline(&mut self.rpm_d);
+                ui.label("Vc:"); ui.text_edit_singleline(&mut self.rpm_vc);
+                ui.label("D:"); ui.text_edit_singleline(&mut self.rpm_d);
                 if ui.button("Vypočítat").clicked() {
-                    let vc: f64 = self.rpm_vc.parse().unwrap_or(0.0);
-                    let d: f64 = self.rpm_d.parse().unwrap_or(0.0);
-                    if d > 0.0 { self.rpm_result = format!("{:.0} ot/min", (vc * 1000.0) / (3.14159 * d)); }
+                     let vc: f64 = self.rpm_vc.parse().unwrap_or(0.0);
+                     let d: f64 = self.rpm_d.parse().unwrap_or(0.0);
+                     if d > 0.0 { self.rpm_result = format!("{:.0}", (vc * 1000.0) / (3.14159 * d)); }
                 }
                 ui.label(&self.rpm_result);
             } else {
-                ui.label("n (ot/min):"); ui.text_edit_singleline(&mut self.feed_n);
+                ui.label("n:"); ui.text_edit_singleline(&mut self.feed_n);
                 ui.label("z:"); ui.text_edit_singleline(&mut self.feed_z);
                 ui.label("fz:"); ui.text_edit_singleline(&mut self.feed_fz);
                 if ui.button("Vypočítat").clicked() {
                     let n: f64 = self.feed_n.parse().unwrap_or(0.0);
                     let z: f64 = self.feed_z.parse().unwrap_or(0.0);
                     let fz: f64 = self.feed_fz.parse().unwrap_or(0.0);
-                    self.feed_result = format!("{:.1} mm/min", n * z * fz);
+                    self.feed_result = format!("{:.1}", n * z * fz);
                 }
                 ui.label(&self.feed_result);
             }
@@ -53,7 +57,7 @@ impl eframe::App for CncApp {
 #[cfg(target_os = "android")]
 #[no_mangle]
 fn android_main(app: android_activity::AndroidApp) {
-    android_logger::init_once(android_logger::Config::default().with_max_level(log::LevelFilter::Info));
+    // Žádné logování, žádné složitosti. Jen čistá grafika.
     let mut options = eframe::NativeOptions::default();
     options.renderer = eframe::Renderer::Glow;
     eframe::run_native("CNC", options, Box::new(|_| Box::new(CncApp::default()))).unwrap();
