@@ -2,14 +2,13 @@ use eframe::egui;
 use log::info;
 
 struct CncApp {
-    // Jednoduchá data, která se neukládají
     text: String,
 }
 
 impl Default for CncApp {
     fn default() -> Self {
         Self {
-            text: "Funguje to!".to_owned(),
+            text: "Konečně to jede!".to_owned(),
         }
     }
 }
@@ -18,8 +17,8 @@ impl eframe::App for CncApp {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         egui::CentralPanel::default().show(ctx, |ui| {
             ui.heading("CNC Kalkulačka");
-            ui.label("Pokud toto čteš, grafika (OpenGL) naskočila.");
-            ui.separator();
+            ui.add_space(20.0);
+            ui.label("Pokud toto vidíš, problém byl v názvu knihovny.");
             ui.text_edit_singleline(&mut self.text);
         });
     }
@@ -29,18 +28,18 @@ impl eframe::App for CncApp {
 #[no_mangle]
 fn android_main(app: android_activity::AndroidApp) {
     use eframe::NativeOptions;
-
+    
+    // Inicializace logování
     android_logger::init_once(android_logger::Config::default().with_max_level(log::LevelFilter::Info));
     
-    // DEFINITIVNÍ VYPNUTÍ VULKANU
+    // Vynucení OpenGL (proti černé obrazovce)
     let options = NativeOptions {
-        renderer: eframe::Renderer::Glow, // Vynutíme OpenGL
+        renderer: eframe::Renderer::Glow,
         ..Default::default()
     };
     
-    // Spuštění bez persistence (aby nenačítal staré chyby)
     eframe::run_native(
-        "CNC Kalkulačka",
+        "CNC App",
         options,
         Box::new(|_cc| Box::new(CncApp::default())),
     ).unwrap();

@@ -10,7 +10,6 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      # Instalace SDK (trik s licencí)
       - name: Install SDK components
         run: |
           yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses > /dev/null
