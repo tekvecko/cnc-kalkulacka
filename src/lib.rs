@@ -11,7 +11,7 @@ fn android_main(app: AndroidApp) {
     };
     
     eframe::run_native(
-        "CNC Test",
+        "CNC Reset",
         options,
         Box::new(|_cc| Box::new(MyApp)),
     ).unwrap();
@@ -23,7 +23,7 @@ impl eframe::App for MyApp {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         egui::CentralPanel::default().show(ctx, |ui| {
             ui.heading("Funguju!");
-            ui.label("Pokud toto vidíš, stará verze byla moc stará.");
+            ui.label("Verze Android SDK 31 načtena.");
         });
     }
 }

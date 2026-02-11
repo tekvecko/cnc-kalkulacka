@@ -5,19 +5,28 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      
       - uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
-      - name: Install Android SDK 33
+      
+      # TOTO JE KLÍČ: Donutíme server stáhnout přesně tu verzi 31, kterou chce Cargo.toml
+      - name: Install Android SDK 31
         run: |
-            yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses > /dev/null
-            $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platforms;android-33" "build-tools;33.0.0"
+          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses > /dev/null
+          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platforms;android-31" "build-tools;31.0.0"
+      
       - uses: dtolnay/rust-toolchain@stable
         with:
           targets: aarch64-linux-android
-      - run: cargo install cargo-apk
-      - run: cargo apk build
+      
+      - name: Install cargo-apk
+        run: cargo install cargo-apk
+      
+      - name: Build APK
+        run: cargo apk build
+      
       - uses: actions/upload-artifact@v4
         with:
           name: cnc-kalkulacka
