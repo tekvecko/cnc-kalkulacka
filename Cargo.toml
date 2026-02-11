@@ -7,19 +7,16 @@ edition = "2021"
 crate-type = ["cdylib"]
 
 [dependencies]
-# Vrátíme se k osvědčené verzi
 eframe = { version = "0.22.0", default-features = false, features = ["glow", "android-native-activity"] }
 android-activity = { version = "=0.4.3", features = ["native-activity"] }
-# Logger zatím pryč, ať to nekomplikuje
-# log = "0.4"
-# android_logger = "0.13"
+log = "0.4"
+android_logger = "0.13"
 
 [package.metadata.android]
 package = "com.moje.cnckalkulacka"
-label = "CNC Final"
-# TADY: Všechno sjednotíme na 30.
-android_version = 30
-target_sdk_version = 30
+label = "CNC Kalkulačka"
+android_version = 33
+target_sdk_version = 33
 min_sdk_version = 24
 fullscreen = true
-build_targets = ["aarch64-linux-android"]
+build_targets = ["aarch64-linux-android", "armv7-linux-androideabi"]
