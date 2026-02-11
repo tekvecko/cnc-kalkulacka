@@ -7,15 +7,18 @@ edition = "2021"
 crate-type = ["cdylib"]
 
 [dependencies]
-# Stabilní verze eframe s vynuceným OpenGL (glow)
+# Použijeme stabilní verzi eframe
 eframe = { version = "0.22", default-features = false, features = ["glow", "android-native-activity"] }
-# Přímá závislost pro správné propojení se systémem Android
-android-activity = { version = "0.4", features = ["native-activity"] }
+# Tato verze musí být sjednocena
+android-activity = { version = "0.4.3", features = ["native-activity"] }
+
+[patch.crates-io]
+# Tímto vynutíme jednu verzi pro celý projekt a předejdeme pádu
+android-activity = { version = "0.4.3", features = ["native-activity"] }
 
 [package.metadata.android]
 package = "com.moje.cnckalkulacka"
 label = "CNC Kalkulačka"
-# Použijeme o něco starší API pro maximální kompatibilitu
 android_version = 30
 target_sdk_version = 31
 min_sdk_version = 21
