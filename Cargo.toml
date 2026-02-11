@@ -8,15 +8,17 @@ crate-type = ["cdylib"]
 
 [dependencies]
 eframe = { version = "0.22.0", default-features = false, features = ["glow", "android-native-activity"] }
+log = "0.4"
 android-activity = { version = "=0.4.3", features = ["native-activity"] }
 
 [package.metadata.android]
 package = "com.moje.cnckalkulacka"
 label = "CNC Kalkulačka"
-# ZMĚNA: Použijeme verzi 33, která je na GitHubu předinstalovaná
+# ZDE JE OPRAVA: Místo 30 dáváme 33 (ta je na serveru nainstalovaná)
 android_version = 33
 target_sdk_version = 33
-min_sdk_version = 24
+# Toto zachová funkčnost i na starších telefonech
+min_sdk_version = 23
 fullscreen = true
-# Stále držíme podporu pro oba typy procesorů
+# Důležité: Podpora pro starší i nové procesory
 build_targets = ["aarch64-linux-android", "armv7-linux-androideabi"]

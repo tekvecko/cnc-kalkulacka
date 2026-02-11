@@ -9,18 +9,13 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
-      
-      # Setup Rust s podporou pro oba typy procesorů
       - uses: dtolnay/rust-toolchain@stable
         with:
           targets: aarch64-linux-android, armv7-linux-androideabi
-      
       - name: Install cargo-apk
         run: cargo install cargo-apk
-      
       - name: Build APK (Universal)
         run: cargo apk build
-      
       - uses: actions/upload-artifact@v4
         with:
           name: cnc-kalkulacka
