@@ -10,8 +10,8 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      # Instalace SDK 30 a NDK (aby build prošel)
-      - name: Install SDK & NDK
+      # Instalace SDK (trik s licencí)
+      - name: Install SDK components
         run: |
           yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses > /dev/null
           $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platforms;android-30" "build-tools;30.0.3" "ndk;25.2.9519653"

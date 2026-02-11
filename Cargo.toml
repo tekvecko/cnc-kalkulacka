@@ -7,23 +7,26 @@ edition = "2021"
 crate-type = ["cdylib"]
 
 [dependencies]
-# Moderní verze eframe (opravuje pády na novějších Androidech)
-eframe = { version = "0.27.2", default-features = false, features = ["glow", "android-native-activity"] }
-# Odpovídající verze lepidla (musí být 0.5 pro eframe 0.27)
-android-activity = { version = "0.5.2", features = ["native-activity"] }
-# Logování
+# Vypneme default features, aby se tam necpal "wgpu" (Vulkan)
+# Zapneme JEN "glow" (OpenGL) a podporu pro Android
+eframe = { version = "0.27.2", default-features = false, features = ["glow", "android-native-activity", "wayland", "x11"] }
+
+# Závislost pro logování
 log = "0.4"
 android_logger = "0.13"
 
+# Lepidlo pro Android
+android-activity = { version = "0.5.2", features = ["native-activity"] }
+
 [package.metadata.android]
 package = "com.moje.cnckalkulacka"
-label = "CNC 2026"
+label = "CNC Fix"
 android_version = 33
 target_sdk_version = 33
 min_sdk_version = 21
 fullscreen = true
-# Důležité: Povolení internetu (některé telefony shazují aplikace bez oprávnění)
+# Povolení internetu (některé telefony bez toho padají)
 permissions = ["android.permission.INTERNET"]
 
-# Build pro obě architektury (aby to nepadalo na 32bit mobilech)
+# Stavíme pro obě architektury
 build_targets = ["aarch64-linux-android", "armv7-linux-androideabi"]
