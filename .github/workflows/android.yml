@@ -11,25 +11,23 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      # TRIK: Zjistíme, co tam je, a vytvoříme falešnou složku 'android-30'
-      # tím, že zkopírujeme tu existující (33 nebo 34).
-      # Tím nástroj najde '30' a bude spokojený.
-      - name: Hack - Create Fake Android 30
+      # KROK OPRAVY: Ruční instalace chybějící platformy 30
+      # Používáme přesný příkaz, který akceptuje licence
+      - name: Install Android SDK 30 & NDK
         run: |
-          cd $ANDROID_HOME/platforms
-          LATEST=$(ls -d android-* | sort -V | tail -n 1)
-          echo "Používám $LATEST jako základ pro android-30"
-          cp -r $LATEST android-30
-          ls -l
+          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses > /dev/null
+          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platforms;android-30" "build-tools;30.0.3" "ndk;25.2.9519653"
 
+      # Nastavíme Rust pro obě architektury (32bit i 64bit)
       - uses: dtolnay/rust-toolchain@stable
         with:
-          targets: aarch64-linux-android
+          targets: aarch64-linux-android, armv7-linux-androideabi
       
       - name: Install cargo-apk
         run: cargo install cargo-apk
       
-      - name: Build APK
+      # Tady se děje magie - build pro obě verze najednou
+      - name: Build Universal APK
         run: cargo apk build
       
       - uses: actions/upload-artifact@v4
