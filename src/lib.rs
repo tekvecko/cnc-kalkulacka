@@ -26,79 +26,50 @@ impl Default for CncApp {
     }
 }
 
-impl CncApp {
-    pub fn new(_cc: &eframe::CreationContext<'_>) -> Self {
-        Self::default()
-    }
-}
-
 impl eframe::App for CncApp {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         egui::CentralPanel::default().show(ctx, |ui| {
             ui.heading("CNC Kalkulačka");
-            
             ui.horizontal(|ui| {
                 if ui.selectable_label(self.active_tab == 0, "Otáčky").clicked() { self.active_tab = 0; }
                 if ui.selectable_label(self.active_tab == 1, "Posuv").clicked() { self.active_tab = 1; }
             });
-            
             ui.separator();
 
             if self.active_tab == 0 {
-                ui.label("Rezková rychlost Vc (m/min):");
-                ui.text_edit_singleline(&mut self.rpm_vc);
-                ui.label("Průměr nástroje D (mm):");
-                ui.text_edit_singleline(&mut self.rpm_d);
-                
-                if ui.button("Vypočítat otáčky").clicked() {
+                ui.label("Vc (m/min):"); ui.text_edit_singleline(&mut self.rpm_vc);
+                ui.label("D (mm):"); ui.text_edit_singleline(&mut self.rpm_d);
+                if ui.button("Vypočítat").clicked() {
                     let vc: f64 = self.rpm_vc.parse().unwrap_or(0.0);
                     let d: f64 = self.rpm_d.parse().unwrap_or(0.0);
-                    if d > 0.0 {
-                        let n = (vc * 1000.0) / (3.14159 * d);
-                        self.rpm_result = format!("Výsledek: {:.0} ot/min", n);
-                    } else {
-                        self.rpm_result = "Chyba: Průměr musí být > 0".into();
-                    }
+                    self.rpm_result = if d > 0.0 { format!("{:.0} ot/min", (vc * 1000.0) / (3.14 * d)) } else { "Chyba".into() };
                 }
-                ui.add_space(10.0);
-                ui.label(egui::RichText::new(&self.rpm_result).strong().size(18.0));
-                
+                ui.label(&self.rpm_result);
             } else {
-                ui.label("Otáčky n (ot/min):");
-                ui.text_edit_singleline(&mut self.feed_n);
-                ui.label("Počet zubů z:");
-                ui.text_edit_singleline(&mut self.feed_z);
-                ui.label("Posuv na zub fz (mm):");
-                ui.text_edit_singleline(&mut self.feed_fz);
-                
-                if ui.button("Vypočítat posuv").clicked() {
+                ui.label("n (ot/min):"); ui.text_edit_singleline(&mut self.feed_n);
+                ui.label("z:"); ui.text_edit_singleline(&mut self.feed_z);
+                ui.label("fz (mm):"); ui.text_edit_singleline(&mut self.feed_fz);
+                if ui.button("Vypočítat").clicked() {
                     let n: f64 = self.feed_n.parse().unwrap_or(0.0);
                     let z: f64 = self.feed_z.parse().unwrap_or(0.0);
                     let fz: f64 = self.feed_fz.parse().unwrap_or(0.0);
-                    let vf = n * z * fz;
-                    self.feed_result = format!("Výsledek: {:.1} mm/min", vf);
+                    self.feed_result = format!("{:.1} mm/min", n * z * fz);
                 }
-                ui.add_space(10.0);
-                ui.label(egui::RichText::new(&self.feed_result).strong().size(18.0));
+                ui.label(&self.feed_result);
             }
         });
     }
 }
 
-// Hlavní vstupní bod pro Android
 #[cfg(target_os = "android")]
 #[no_mangle]
 fn android_main(app: android_activity::AndroidApp) {
-    use eframe::NativeOptions;
-    
-    let mut options = NativeOptions::default();
-    // Vynucení Glow (OpenGL), který je na mobilech nejstabilnější
+    let mut options = eframe::NativeOptions::default();
     options.renderer = eframe::Renderer::Glow;
-
     eframe::run_native(
-        "CNC Kalkulačka",
-        options,
-        Box::new(|cc| Box::new(CncApp::new(cc))),
+        "CNC", 
+        options, 
+        Box::new(|cc| Box::new(CncApp { ..Default::default() }))
     ).unwrap();
 }
 

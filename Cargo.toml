@@ -7,15 +7,15 @@ edition = "2021"
 crate-type = ["cdylib"]
 
 [dependencies]
-# Použijeme eframe 0.22, která je nejméně náchylná k pádům na Androidu
-eframe = { version = "0.22", default-features = false, features = ["glow", "android-native-activity"] }
-
-# Zde je klíč: Vynutíme verzi 0.4.3, kterou eframe 0.22 interně vyžaduje
+# Tato verze eframe je nejstabilnější pro začátečnické projekty na Androidu
+eframe = { version = "0.22.0", default-features = false, features = ["glow", "android-native-activity"] }
+# Vynucení přesné verze pro odstranění vnitřních konfliktů
 android-activity = { version = "=0.4.3", features = ["native-activity"] }
 
 [package.metadata.android]
 package = "com.moje.cnckalkulacka"
 label = "CNC Kalkulačka"
+# Snížení na API 30 pro lepší stabilitu na starších telefonech
 android_version = 30
 target_sdk_version = 31
 min_sdk_version = 21
