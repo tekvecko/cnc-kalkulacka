@@ -86,7 +86,15 @@ use android_activity::AndroidApp;
 #[cfg(target_os = "android")]
 #[no_mangle]
 fn android_main(app: AndroidApp) {
-    let options = eframe::NativeOptions::default();
+    use eframe::NativeOptions;
+    
+    // Inicializace logování pro případ chyby
+    android_logger::init_once(android_logger::Config::default().with_min_level(log::Level::Info));
+
+    // ZDE JE TA OPRAVA: Vynutíme použití Glow (OpenGL) místo Vulkanu
+    let mut options = NativeOptions::default();
+    options.renderer = eframe::Renderer::Glow; 
+
     eframe::run_native(
         "CNC Kalkulačka",
         options,
