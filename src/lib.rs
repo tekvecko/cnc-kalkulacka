@@ -55,7 +55,15 @@ impl eframe::App for CncApp {
 #[cfg(target_os = "android")]
 #[no_mangle]
 fn android_main(app: android_activity::AndroidApp) {
-    let mut options = eframe::NativeOptions::default();
+    use eframe::NativeOptions;
+    
+    // 1. Zapneme logování (aby šla chyba vidět v Logcatu, kdyby to spadlo)
+    android_logger::init_once(android_logger::Config::default().with_max_level(log::LevelFilter::Info));
+
+    let mut options = NativeOptions::default();
     options.renderer = eframe::Renderer::Glow;
+    // 2. OPRAVA PÁDU: Zakážeme ukládání stavu (to často shazuje aplikaci kvůli právům)
+    // V eframe 0.22 se to dělá tak, že nenastavíme storage.
+    
     eframe::run_native("CNC", options, Box::new(|_| Box::new(CncApp::default()))).unwrap();
 }

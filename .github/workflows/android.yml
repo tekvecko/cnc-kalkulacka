@@ -10,7 +10,7 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
       
-      # TOTO JE TA OPRAVA: Ručně nainstalujeme to, co serveru chybí
+      # Instalace chybějícího Android SDK 30
       - name: Install Android SDK 30 manually
         run: |
           yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses > /dev/null

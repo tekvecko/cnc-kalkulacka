@@ -8,14 +8,15 @@ crate-type = ["cdylib"]
 
 [dependencies]
 eframe = { version = "0.22.0", default-features = false, features = ["glow", "android-native-activity"] }
-# Žádný logger, jen čistá grafika
 android-activity = { version = "=0.4.3", features = ["native-activity"] }
+# TOTO JSME MINULE ZAPOMNĚLI:
+android_logger = "0.13"
+log = "0.4"
 
 [package.metadata.android]
 package = "com.moje.cnckalkulacka"
 label = "CNC Kalkulačka"
-# Nastavíme to na 30, protože to budeme instalovat
-android_version = 30
+android_version = 33
 target_sdk_version = 33
 min_sdk_version = 23
 fullscreen = true
