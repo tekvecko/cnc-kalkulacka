@@ -8,6 +8,7 @@ name = "main_lib"
 crate-type = ["cdylib"]
 
 [dependencies]
+# Grafika (používáme stabilní verzi)
 eframe = { version = "0.27.2", default-features = false, features = ["glow", "android-native-activity"] }
 android-activity = { version = "0.5.2", features = ["native-activity"] }
 log = "0.4"
@@ -15,12 +16,12 @@ android_logger = "0.13"
 
 [package.metadata.android]
 package = "com.cnc.simple"
-label = "CNC Kalkulačka"
+label = "CNC Fix"
 android_version = 33
 target_sdk_version = 33
 min_sdk_version = 21
 fullscreen = true
 lib_name = "main_lib"
+# Povolení internetu občas řeší podivné pády na Samsung/Xiaomi
 permissions = ["android.permission.INTERNET"]
-# Stavíme pro obě architektury, aby to jelo na všech telefonech
 build_targets = ["aarch64-linux-android", "armv7-linux-androideabi"]

@@ -10,6 +10,7 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
+      # Instalace Android SDK
       - name: Install SDK components
         run: |
           yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses > /dev/null
@@ -25,11 +26,9 @@ jobs:
       - name: Build APK
         run: cargo apk build
       
-      - name: List APKs (Debug info)
-        run: find target -name "*.apk"
-
-      # Tady je oprava - najdeme cokoliv s koncovkou .apk
-      - uses: actions/upload-artifact@v4
+      # Najdeme jakékoliv APK a nahrajeme ho
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
         with:
           name: cnc-kalkulacka
           path: target/debug/apk/*.apk
