@@ -55,7 +55,6 @@ impl eframe::App for CncApp {
 #[cfg(target_os = "android")]
 #[no_mangle]
 fn android_main(app: android_activity::AndroidApp) {
-    // Žádný logger, jen čistá grafika
     let mut options = eframe::NativeOptions::default();
     options.renderer = eframe::Renderer::Glow;
     eframe::run_native("CNC", options, Box::new(|_| Box::new(CncApp::default()))).unwrap();

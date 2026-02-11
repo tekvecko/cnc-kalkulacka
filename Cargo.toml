@@ -7,19 +7,16 @@ edition = "2021"
 crate-type = ["cdylib"]
 
 [dependencies]
-# Grafika
 eframe = { version = "0.22.0", default-features = false, features = ["glow", "android-native-activity"] }
-# Logger jsme VYHODILI, aby nedělal problémy
-# Android aktivita - fixnutá verze
+# Žádný logger, jen čistá grafika
 android-activity = { version = "=0.4.3", features = ["native-activity"] }
 
 [package.metadata.android]
 package = "com.moje.cnckalkulacka"
 label = "CNC Kalkulačka"
-# TADY JE TA ZMĚNA - MUSÍ TAM BÝT 33 (GitHub má 33, nemá 30)
-android_version = 33
+# Nastavíme to na 30, protože to budeme instalovat
+android_version = 30
 target_sdk_version = 33
 min_sdk_version = 23
 fullscreen = true
-# Podpora pro staré i nové mobily
 build_targets = ["aarch64-linux-android", "armv7-linux-androideabi"]

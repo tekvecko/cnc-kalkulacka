@@ -9,12 +9,23 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
+      
+      # TOTO JE TA OPRAVA: Ručně nainstalujeme to, co serveru chybí
+      - name: Install Android SDK 30 manually
+        run: |
+          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses > /dev/null
+          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platforms;android-30" "build-tools;30.0.3"
+
       - uses: dtolnay/rust-toolchain@stable
         with:
           targets: aarch64-linux-android, armv7-linux-androideabi
-      - run: cargo install cargo-apk
+      
+      - name: Install cargo-apk
+        run: cargo install cargo-apk
+      
       - name: Build APK (Universal)
         run: cargo apk build
+      
       - uses: actions/upload-artifact@v4
         with:
           name: cnc-kalkulacka
