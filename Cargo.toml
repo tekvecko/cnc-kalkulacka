@@ -3,14 +3,13 @@ name = "cnc_kalkulacka"
 version = "0.1.0"
 edition = "2021"
 
-# TOTO JE TA KLÍČOVÁ ZMĚNA:
-# Natvrdo pojmenujeme knihovnu "main_lib", aby nebyly zmatky s pomlčkami
+# Důležité: Název knihovny musí sedět s tím, co čeká Android
 [lib]
 name = "main_lib"
 crate-type = ["cdylib"]
 
 [dependencies]
-# Stabilní verze eframe a activity
+# Grafika + Android podpora
 eframe = { version = "0.27.2", default-features = false, features = ["glow", "android-native-activity"] }
 android-activity = { version = "0.5.2", features = ["native-activity"] }
 log = "0.4"
@@ -23,9 +22,9 @@ android_version = 33
 target_sdk_version = 33
 min_sdk_version = 21
 fullscreen = true
-# Řekneme Androidu: "Hledej přesně tuto knihovnu"
+# Odkaz na přejmenovanou knihovnu
 lib_name = "main_lib"
 permissions = ["android.permission.INTERNET"]
 
-# Stavíme pro obě architektury (proti pádům na 32bit mobilech)
+# Build pro obě architektury
 build_targets = ["aarch64-linux-android", "armv7-linux-androideabi"]

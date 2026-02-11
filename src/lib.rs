@@ -8,7 +8,7 @@ struct CncApp {
 impl Default for CncApp {
     fn default() -> Self {
         Self {
-            text: "Konečně to jede!".to_owned(),
+            text: "Funguje to! (C++ fix)".to_owned(),
         }
     }
 }
@@ -18,7 +18,7 @@ impl eframe::App for CncApp {
         egui::CentralPanel::default().show(ctx, |ui| {
             ui.heading("CNC Kalkulačka");
             ui.add_space(20.0);
-            ui.label("Pokud toto vidíš, problém byl v názvu knihovny.");
+            ui.label("Pokud toto vidíš, C++ knihovna byla úspěšně načtena.");
             ui.text_edit_singleline(&mut self.text);
         });
     }
@@ -29,10 +29,8 @@ impl eframe::App for CncApp {
 fn android_main(app: android_activity::AndroidApp) {
     use eframe::NativeOptions;
     
-    // Inicializace logování
     android_logger::init_once(android_logger::Config::default().with_max_level(log::LevelFilter::Info));
     
-    // Vynucení OpenGL (proti černé obrazovce)
     let options = NativeOptions {
         renderer: eframe::Renderer::Glow,
         ..Default::default()
