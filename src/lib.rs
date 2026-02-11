@@ -1,6 +1,5 @@
 use eframe::egui;
 
-#[derive(Default)]
 pub struct CncApp {
     rpm_vc: String,
     rpm_d: String,
@@ -10,6 +9,21 @@ pub struct CncApp {
     feed_fz: String,
     feed_result: String,
     active_tab: usize,
+}
+
+impl Default for CncApp {
+    fn default() -> Self {
+        Self {
+            rpm_vc: "100".to_owned(),
+            rpm_d: "10".to_owned(),
+            rpm_result: String::new(),
+            feed_n: "1000".to_owned(),
+            feed_z: "4".to_owned(),
+            feed_fz: "0.1".to_owned(),
+            feed_result: String::new(),
+            active_tab: 0,
+        }
+    }
 }
 
 impl CncApp {
@@ -22,78 +36,64 @@ impl eframe::App for CncApp {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         egui::CentralPanel::default().show(ctx, |ui| {
             ui.heading("CNC Kalkulačka");
-            ui.separator();
+            
             ui.horizontal(|ui| {
-                if ui.button("Otáčky").clicked() { self.active_tab = 0; }
-                if ui.button("Posuv").clicked() { self.active_tab = 1; }
+                if ui.selectable_label(self.active_tab == 0, "Otáčky").clicked() { self.active_tab = 0; }
+                if ui.selectable_label(self.active_tab == 1, "Posuv").clicked() { self.active_tab = 1; }
             });
+            
             ui.separator();
-            match self.active_tab {
-                0 => {
-                    ui.label("Výpočet otáček (n)");
-                    ui.horizontal(|ui| {
-                        ui.label("Vc (m/min):");
-                        ui.text_edit_singleline(&mut self.rpm_vc);
-                    });
-                    ui.horizontal(|ui| {
-                        ui.label("D (mm):");
-                        ui.text_edit_singleline(&mut self.rpm_d);
-                    });
-                    if ui.button("Vypočítat").clicked() {
-                        let vc: f64 = self.rpm_vc.parse().unwrap_or(0.0);
-                        let d: f64 = self.rpm_d.parse().unwrap_or(0.0);
-                        if d != 0.0 {
-                            let n = (vc * 1000.0) / (3.14159 * d);
-                            self.rpm_result = format!("{:.0} ot/min", n);
-                        } else {
-                            self.rpm_result = "Chyba: D je 0".to_string();
-                        }
+
+            if self.active_tab == 0 {
+                ui.label("Rezková rychlost Vc (m/min):");
+                ui.text_edit_singleline(&mut self.rpm_vc);
+                ui.label("Průměr nástroje D (mm):");
+                ui.text_edit_singleline(&mut self.rpm_d);
+                
+                if ui.button("Vypočítat otáčky").clicked() {
+                    let vc: f64 = self.rpm_vc.parse().unwrap_or(0.0);
+                    let d: f64 = self.rpm_d.parse().unwrap_or(0.0);
+                    if d > 0.0 {
+                        let n = (vc * 1000.0) / (3.14159 * d);
+                        self.rpm_result = format!("Výsledek: {:.0} ot/min", n);
+                    } else {
+                        self.rpm_result = "Chyba: Průměr musí být > 0".into();
                     }
-                    ui.label(egui::RichText::new(&self.rpm_result).size(20.0).strong());
                 }
-                1 => {
-                    ui.label("Výpočet posuvu (Vf)");
-                    ui.horizontal(|ui| {
-                        ui.label("n (ot/min):");
-                        ui.text_edit_singleline(&mut self.feed_n);
-                    });
-                    ui.horizontal(|ui| {
-                        ui.label("Počet zubů (z):");
-                        ui.text_edit_singleline(&mut self.feed_z);
-                    });
-                    ui.horizontal(|ui| {
-                        ui.label("fz (mm/zub):");
-                        ui.text_edit_singleline(&mut self.feed_fz);
-                    });
-                    if ui.button("Vypočítat").clicked() {
-                        let n: f64 = self.feed_n.parse().unwrap_or(0.0);
-                        let z: f64 = self.feed_z.parse().unwrap_or(0.0);
-                        let fz: f64 = self.feed_fz.parse().unwrap_or(0.0);
-                        let vf = n * z * fz;
-                        self.feed_result = format!("{:.1} mm/min", vf);
-                    }
-                    ui.label(egui::RichText::new(&self.feed_result).size(20.0).strong());
+                ui.add_space(10.0);
+                ui.label(egui::RichText::new(&self.rpm_result).strong().size(18.0));
+                
+            } else {
+                ui.label("Otáčky n (ot/min):");
+                ui.text_edit_singleline(&mut self.feed_n);
+                ui.label("Počet zubů z:");
+                ui.text_edit_singleline(&mut self.feed_z);
+                ui.label("Posuv na zub fz (mm):");
+                ui.text_edit_singleline(&mut self.feed_fz);
+                
+                if ui.button("Vypočítat posuv").clicked() {
+                    let n: f64 = self.feed_n.parse().unwrap_or(0.0);
+                    let z: f64 = self.feed_z.parse().unwrap_or(0.0);
+                    let fz: f64 = self.feed_fz.parse().unwrap_or(0.0);
+                    let vf = n * z * fz;
+                    self.feed_result = format!("Výsledek: {:.1} mm/min", vf);
                 }
-                _ => {}
+                ui.add_space(10.0);
+                ui.label(egui::RichText::new(&self.feed_result).strong().size(18.0));
             }
         });
     }
 }
 
-#[cfg(target_os = "android")]
-use android_activity::AndroidApp;
-
+// Hlavní vstupní bod pro Android
 #[cfg(target_os = "android")]
 #[no_mangle]
-fn android_main(app: AndroidApp) {
+fn android_main(app: android_activity::AndroidApp) {
     use eframe::NativeOptions;
     
-    // Inicializace logování pro případ chyby
-    android_logger::init_once(android_logger::Config::default().with_max_level(log::LevelFilter::Info));
-
-    // ZDE JE TA OPRAVA: Vynutíme použití Glow (OpenGL) místo Vulkanu
     let mut options = NativeOptions::default();
-    options.renderer = eframe::Renderer::Glow; 
+    // Vynucení Glow (OpenGL), který je na mobilech nejstabilnější
+    options.renderer = eframe::Renderer::Glow;
 
     eframe::run_native(
         "CNC Kalkulačka",
