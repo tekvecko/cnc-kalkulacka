@@ -1,0 +1,21 @@
+[package]
+name = "cnc_kalkulacka"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+eframe = "0.24.0" # Grafická knihovna
+serde = { version = "1", features = ["derive"] } # Pro ukládání stavu (volitelné)
+
+# Nastavení pro Android (název aplikace a ikona)
+[package.metadata.android]
+package = "com.moje.cnckalkulacka"
+label = "CNC Kalkulačka"
+android_version = 31
+target_sdk_version = 33
+min_sdk_version = 21
+fullscreen = true
+
